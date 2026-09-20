@@ -30,6 +30,10 @@ PORT = int(os.environ.get("PORT", 8080))
 DOWNLOAD_DIR = Path("downloads")
 DOWNLOAD_DIR.mkdir(exist_ok=True)
 
+# تنظیم آدرس سرور تولید توکن PO
+POT_SERVER_URL = "http://127.0.0.1:4416"
+os.environ["YTDLP_POT_SERVER_URL"] = POT_SERVER_URL
+
 MAX_TELEGRAM_SIZE = 50 * 1024 * 1024
 
 logging.basicConfig(
@@ -78,8 +82,7 @@ def _download(url: str, format_selector: str, kind: str, out_path: Path):
         "no_warnings": True,
         "noplaylist": True,
         "retries": 3,
-        "socket_timeout": 30,
-        "extractor_args": {"youtube": {"player_client": ["android"]}},
+        "socket_timeout": 60,
     }
 
     if kind == "audio":
