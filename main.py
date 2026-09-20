@@ -70,6 +70,7 @@ def is_valid_url(text: str) -> bool:
 
 
 def _download(url: str, format_selector: str, kind: str, out_path: Path):
+    """دانلود سینک - داخل thread اجرا می‌شه"""
     ydl_opts = {
         "outtmpl": str(out_path),
         "format": format_selector,
@@ -78,6 +79,7 @@ def _download(url: str, format_selector: str, kind: str, out_path: Path):
         "noplaylist": True,
         "retries": 3,
         "socket_timeout": 30,
+        "extractor_args": {"youtube": {"player_client": ["android"]}},
     }
 
     if kind == "audio":
@@ -107,6 +109,7 @@ def _download(url: str, format_selector: str, kind: str, out_path: Path):
 
 
 def _compress_video(input_path: Path, output_path: Path):
+    """فشرده‌سازی با ffmpeg تا زیر 50MB"""
     for crf in [28, 32, 36, 40]:
         cmd = [
             "ffmpeg", "-y", "-i", str(input_path),
